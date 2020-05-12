@@ -1,18 +1,20 @@
 #include <Watchdog.h>
 
-Volt::CWatchdog::CWatchdog(const TAssetType& assetType)
+Volt::CWatchdog::CWatchdog(const TAssetType& assetType, const std::filesystem::path& cwFolder, const std::string& extension)
 	: mAssetType(assetType)
+	, mCwFolder(cwFolder)
+	, mExtension(extension)
 {
 
 }
 
 void Volt::CWatchdog::Update()
 {
-	DeleteFiles();
-	InsertFiles();
+	CheckDeletedFiles();
+	CheckInsertedFiles();
 }
 
-void Volt::CWatchdog::DeleteFiles()
+void Volt::CWatchdog::CheckDeletedFiles()
 {
 	mToDelete.clear();
 
@@ -25,15 +27,15 @@ void Volt::CWatchdog::DeleteFiles()
 		});
 }
 
-void Volt::CWatchdog::InsertFiles()
+void Volt::CWatchdog::CheckInsertedFiles()
 {
 	mToCreate.clear();
 
-	for (const auto it : std::filesystem::directory_iterator(mAssetType.folder))
+	for (const auto it : std::filesystem::directory_iterator(mCwFolder))
 	{
 		const auto file = it.path();
 
-		if (file.extension() != mAssetType.extension) continue;
+		if (file.extension() != mExtension) continue;
 		if (mFiles.find(file) != mFiles.cend()) continue;
 
 		mFiles.emplace(file);

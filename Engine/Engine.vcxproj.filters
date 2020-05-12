@@ -47,22 +47,22 @@
     <ClInclude Include="Include\ModuleLoader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Api\Volt\Module.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Api\Volt\Types.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Include\AssetDatabase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Include\Instance.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Api\Volt\Volt.h">
+    <ClInclude Include="Include\Module.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Include\AssetType.h">
+    <ClInclude Include="Include\Types.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Volt.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Engine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

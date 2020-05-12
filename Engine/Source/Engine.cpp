@@ -1,12 +1,11 @@
+#include <Engine.h>
 #include <Core.h>
 #include <AssetDatabase.h>
 #include <Window.h>
 
 int main()
 {
-	auto& assetDb = Volt::CAssetDatabase::Get("C:\\Users\\Michael\\source\\repos\\Volt\\x64\\Debug\\Streaming");
-	
-	assetDb.RegisterAssetType({ Volt::TAssetType::Module, "C:\\Users\\Michael\\source\\repos\\Volt\\x64\\Debug", ".dll" });
+	auto& assetDb = Volt::CAssetDatabase::Instance();
 
 	Volt::CWindow window(1280, 720, 0, 0);
 
@@ -29,7 +28,7 @@ int main()
 
 		if ((time - prevRenderTime) >= renderRate)
 		{
-			glfwSwapBuffers(window.Ptr());
+			glfwSwapBuffers(window.GlfwWindowPtr());
 
 			prevRenderTime = time;
 		}

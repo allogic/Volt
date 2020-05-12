@@ -1,3 +1,6 @@
+#include <Glad/glad.h>
+#include <Glfw/glfw3.h>
+
 #include <Window.h>
 
 Volt::CWindow::CWindow(const s32 width, const s32 height, const s32 antialiasing, const s32 vsync)
@@ -19,26 +22,26 @@ Volt::CWindow::CWindow(const s32 width, const s32 height, const s32 antialiasing
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
-	mpWindow = glfwCreateWindow(width, height, "", nullptr, nullptr);
+	mpGlfwWindow = glfwCreateWindow(width, height, "", nullptr, nullptr);
 
-	if (!mpWindow)
+	if (!mpGlfwWindow)
 	{
 		VOLT_TRACE("Failed creating glfw window");
 
 		return;
 	}
 
-	glfwMakeContextCurrent(mpWindow);
+	glfwMakeContextCurrent(mpGlfwWindow);
 	glfwSwapInterval(vsync);
 
 	//glfwSetWindowUserPointer(mpWindow, pApplication);
 
-	glfwSetWindowCloseCallback(mpWindow, [](GLFWwindow* pWindow) {
+	glfwSetWindowCloseCallback(mpGlfwWindow, [](GLFWwindow* pWindow) {
 		//auto* app = reinterpret_cast<CApplication*>(glfwGetWindowUserPointer(pWindow));
 		//
 		//app->mRunning = false;
 		});
-	glfwSetWindowSizeCallback(mpWindow, [](GLFWwindow* pWindow, s32 w, s32 h) {
+	glfwSetWindowSizeCallback(mpGlfwWindow, [](GLFWwindow* pWindow, s32 w, s32 h) {
 		//auto* app = reinterpret_cast<CApplication*>(glfwGetWindowUserPointer(pWindow));
 		//
 		//app->mWindowConfig.width = width;
@@ -55,8 +58,8 @@ Volt::CWindow::CWindow(const s32 width, const s32 height, const s32 antialiasing
 
 Volt::CWindow::~CWindow()
 {
-	if (mpWindow)
-		glfwDestroyWindow(mpWindow);
+	if (mpGlfwWindow)
+		glfwDestroyWindow(mpGlfwWindow);
 
 	glfwTerminate();
 }

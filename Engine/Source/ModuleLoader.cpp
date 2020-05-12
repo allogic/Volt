@@ -1,25 +1,29 @@
+#include <Windows.h>
+
 #include <ModuleLoader.h>
 
 s32 Volt::CModuleLoader::Unload(const std::filesystem::path& file)
 {
 	const auto it = mInstances.find(file);
 
-	if (it == mInstances.cend()) return false;
+	if (it == mInstances.cend()) return 0;
 
 	const auto hInstance = std::get<0>(it->second);
 
 	mInstances.erase(file);
 
-	return static_cast<s32>(FreeLibrary(hInstance));
+	const auto status = FreeLibrary(hInstance);
+
+	return static_cast<s32>(status);
 }
 
 s32 Volt::CModuleLoader::Load(const std::filesystem::path& file)
 {
-	if (mInstances.find(file) != mInstances.cend()) return false;
+	if (mInstances.find(file) != mInstances.cend()) return 0;
 
 	HINSTANCE hInstance = LoadLibraryA(file.string().c_str());
 
-	if (!hInstance) return false;
+	if (!hInstance) return 0;
 
 	CModule::CreateModule CreateModule = reinterpret_cast<CModule::CreateModule>(
 		GetProcAddress(hInstance, "CreateModule")
@@ -28,12 +32,12 @@ s32 Volt::CModuleLoader::Load(const std::filesystem::path& file)
 		GetProcAddress(hInstance, "DestroyModule")
 		);
 
-	if (!CreateModule || !DestroyModule) return false;
+	if (!CreateModule || !DestroyModule) return 0;
 
 	mInstances.emplace(
 		file,
-		TModuleInstance{ hInstance, std::unique_ptr<CModule, CModule::DestroyModule>(CreateModule(), DestroyModule) }
+		TModuleInstance{ hInstance, TModulePtr{CreateModule(), DestroyModule} }
 	);
 
-	return true;
+	return 1;
 }

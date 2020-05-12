@@ -1,25 +1,23 @@
-#include <Volt/Types.h>
-#include <Volt/Module.h>
+#include <Volt.h>
 
 #include <iostream>
 
-class CDemo0 final
+class CDemo0
 	: public Volt::CModule
 {
 public:
-	CDemo0() { std::cout << "Demo0 constructed" << std::endl; };
-	~CDemo0() final { std::cout << "Demo0 destructed" << std::endl; };
+	CDemo0(const char* id) : Volt::CModule(id) { std::cout << "Demo0 constructed" << std::endl; };
+	virtual ~CDemo0() { std::cout << "Demo0 destructed" << std::endl; };
 
-	s32 OnUpdate() final
+	s32 OnUpdate() override
 	{
-		return true;
+		return 0;
 	}
 
-	s32 OnRender() const final
+	s32 OnRender() const override
 	{
-		return true;
+		return 0;
 	}
 };
 
-Volt::CModule* CreateModule() { return new CDemo0; }
-void					 DestroyModule(Volt::CModule* ptr) { delete ptr; }
+MAKE_MODULE(CDemo0, "Demo0");

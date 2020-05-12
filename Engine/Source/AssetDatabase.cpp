@@ -1,17 +1,23 @@
 #include <AssetDatabase.h>
 
-Volt::CAssetDatabase::CAssetDatabase(const std::filesystem::path& streamingFolder)
-	: mStreamingFolder(streamingFolder)
+Volt::CAssetDatabase::CAssetDatabase()
 {
-	if (!std::filesystem::is_directory(mStreamingFolder))
-		std::filesystem::create_directory(mStreamingFolder);
+	const auto cwFolder = std::filesystem::current_path();
+	const auto tmpFolder = std::filesystem::temp_directory_path() / "Volt/Assets";
+
+	mModuleFolder = tmpFolder / "Modules";
+
+	CreateFolderIfNotExists(tmpFolder);
+	CreateFolderIfNotExists(mModuleFolder);
+
+	mWatchdogs.emplace_back(TAssetType::Module, cwFolder, ".dll");
 }
 
 Volt::CAssetDatabase::~CAssetDatabase()
 {
 	for (const auto& watchdog : mWatchdogs)
 	{
-		switch (watchdog.AssetType().type)
+		switch (watchdog.AssetType())
 		{
 		case TAssetType::Module:
 			UnloadModule(watchdog.AllFiles());
@@ -26,11 +32,11 @@ void Volt::CAssetDatabase::Update()
 	{
 		watchdog.Update();
 
-		switch (watchdog.AssetType().type)
+		switch (watchdog.AssetType())
 		{
 		case TAssetType::Module:
-			UnloadModule(watchdog.FilesToDelete());
-			LoadModule(watchdog.FilesToCreate());
+			UnloadModule(watchdog.ToDelete());
+			LoadModule(watchdog.ToCreate());
 			break;
 		default:
 			break;
@@ -38,11 +44,17 @@ void Volt::CAssetDatabase::Update()
 	}
 }
 
+void Volt::CAssetDatabase::CreateFolderIfNotExists(const std::filesystem::path& folder) const
+{
+	if (!std::filesystem::is_directory(folder))
+		std::filesystem::create_directory(folder);
+}
+
 void Volt::CAssetDatabase::UnloadModule(const CWatchdog::TFileSet& fileSet)
 {
 	for (const auto& srcFile : fileSet)
 	{
-		const auto destFile = mStreamingFolder / srcFile.filename();
+		const auto destFile = mModuleFolder / srcFile.filename();
 
 		if (!mModuleLoader.Unload(destFile))
 			VOLT_TRACE("Failed unloading module " << destFile);
@@ -55,7 +67,7 @@ void Volt::CAssetDatabase::LoadModule(const CWatchdog::TFileSet& fileSet)
 {
 	for (const auto& srcFile : fileSet)
 	{
-		const auto destFile = mStreamingFolder / srcFile.filename();
+		const auto destFile = mModuleFolder / srcFile.filename();
 
 		std::filesystem::copy_file(srcFile, destFile, std::filesystem::copy_options::overwrite_existing);
 

@@ -1,18 +1,19 @@
 #pragma once
 
 #include <Core.h>
+#include <Types.h>
 
 namespace Volt
 {
-	class CWindow final
+	class CWindow
 	{
 	public:
 		CWindow(const s32 width, const s32 height, const s32 antialiasing, const s32 vsync);
-		~CWindow();
+		virtual ~CWindow();
 
-		inline GLFWwindow* Ptr() const { return mpWindow; }
+		inline GLFWwindow* GlfwWindowPtr() const { return mpGlfwWindow; }
 
 	private:
-		GLFWwindow* mpWindow = nullptr;
+		GLFWwindow* mpGlfwWindow = nullptr;
 	};
 }

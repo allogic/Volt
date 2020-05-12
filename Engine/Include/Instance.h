@@ -8,7 +8,10 @@ namespace Volt
 	class CInstance
 	{
 	public:
-		static T& Get()
+		CInstance() = default;
+		virtual ~CInstance() = default;
+
+		static T& Instance()
 		{
 			if (!pInstance) pInstance = new T;
 
@@ -16,7 +19,7 @@ namespace Volt
 		}
 
 		template<typename ... Args>
-		static T& Get(Args&&... args)
+		static T& Instance(Args&&... args)
 		{
 			if (!pInstance) pInstance = new T(std::forward<Args>(args)...);
 
