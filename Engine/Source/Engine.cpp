@@ -2,13 +2,26 @@
 
 #include <Core.h>
 #include <AssetDatabase.h>
-#include <Window.h>
 
 int main()
 {
-	auto& assetDb = Volt::CAssetDatabase::Instance();
+	glfwSetErrorCallback([](s32 error, const char* msg) {
+		VOLT_TRACE(msg);
+		});
 
-	Volt::CWindow window(1280, 720, 0, 0);
+	if (!glfwInit()) // remove glad.c
+	{
+		VOLT_TRACE("Failed initializing glfw");
+		VOLT_EXIT;
+	}
+
+	if (!gladLoadGL())
+	{
+		VOLT_TRACE("Failed loading gl");
+		VOLT_EXIT;
+	}
+
+	auto& assetDb = Volt::CAssetDatabase::Instance();
 
 	f32 time = 0.f;
 	f32 prevTime = 0.f;
@@ -32,13 +45,12 @@ int main()
 		for (Volt::CModule* pModule : assetDb.Modules())
 			status = pModule->OnUpdate();
 
-
 		if ((time - prevRenderTime) >= renderRate)
 		{
 			for (Volt::CModule* pModule : assetDb.Modules())
 				status = pModule->OnRender();
 
-			glfwSwapBuffers(window.GlfwWindowPtr());
+			//glfwSwapBuffers(window.GlfwWindowPtr());
 
 			prevRenderTime = time;
 		}
@@ -54,6 +66,8 @@ int main()
 	}
 
 	Volt::CAssetDatabase::Delete();
+
+	glfwTerminate();
 
 	return 0;
 }

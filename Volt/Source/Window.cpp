@@ -2,17 +2,6 @@
 
 Volt::CWindow::CWindow(const s32 width, const s32 height, const s32 antialiasing, const s32 vsync)
 {
-	glfwSetErrorCallback([](s32 error, const char* msg) {
-		VOLT_TRACE(msg);
-		});
-
-	if (!glfwInit())
-	{
-		VOLT_TRACE("Failed initializing glfw");
-
-		return;
-	}
-
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, VOLT_GL_MAJOR);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, VOLT_GL_MINOR);
 	glfwWindowHint(GLFW_SAMPLES, antialiasing);
@@ -21,12 +10,12 @@ Volt::CWindow::CWindow(const s32 width, const s32 height, const s32 antialiasing
 
 	mpGlfwWindow = glfwCreateWindow(width, height, "", nullptr, nullptr);
 
-	if (!mpGlfwWindow)
-	{
-		VOLT_TRACE("Failed creating glfw window");
-
-		return;
-	}
+	//if (!mpGlfwWindow)
+	//{
+	//	VOLT_TRACE("Failed creating glfw window");
+	//
+	//	return;
+	//}
 
 	glfwMakeContextCurrent(mpGlfwWindow);
 	glfwSwapInterval(vsync);
@@ -44,19 +33,10 @@ Volt::CWindow::CWindow(const s32 width, const s32 height, const s32 antialiasing
 		//app->mWindowConfig.width = width;
 		//app->mWindowConfig.height = height;
 		});
-
-	if (!gladLoadGL())
-	{
-		VOLT_TRACE("Failed loading gl");
-
-		return;
-	}
 }
 
 Volt::CWindow::~CWindow()
 {
 	if (mpGlfwWindow)
 		glfwDestroyWindow(mpGlfwWindow);
-
-	glfwTerminate();
 }
