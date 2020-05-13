@@ -6,11 +6,15 @@ class CDemo1
 	: public Volt::CModule
 {
 public:
-	CDemo1(const char* id) : Volt::CModule(id) { std::cout << "Demo0 constructed" << std::endl; };
-	virtual ~CDemo1() { std::cout << "Demo0 destructed" << std::endl; };
+	CDemo1() { std::cout << "Demo1 constructed" << std::endl; };
+	virtual ~CDemo1() { std::cout << "Demo1 destructed" << std::endl; };
+
+	inline const std::string Id() const { return "Demo1"; };
 
 	s32 OnUpdate() override
 	{
+		//std::cout << "Hello from demo1" << std::endl;
+
 		return 0;
 	}
 
@@ -20,4 +24,4 @@ public:
 	}
 };
 
-MAKE_MODULE(CDemo1, "Demo1");
+MAKE_MODULE(CDemo1);

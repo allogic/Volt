@@ -1,6 +1,6 @@
 #include <Watchdog.h>
 
-Volt::CWatchdog::CWatchdog(const TAssetType& assetType, const std::filesystem::path& cwFolder, const std::string& extension)
+Volt::CWatchdog::CWatchdog(TAssetType assetType, const std::filesystem::path& cwFolder, const std::string& extension)
 	: mAssetType(assetType)
 	, mCwFolder(cwFolder)
 	, mExtension(extension)

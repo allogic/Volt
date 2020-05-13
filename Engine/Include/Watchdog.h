@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Core.h>
-#include <AssetDatabase.h>
+#include <AssetType.h>
 
 namespace Volt
 {
@@ -10,14 +10,14 @@ namespace Volt
 	public:
 		using TFileSet = std::set<std::filesystem::path>;
 
-		CWatchdog(const TAssetType& assetType, const std::filesystem::path& cwFolder, const std::string& extension);
+		CWatchdog(TAssetType assetType, const std::filesystem::path& cwFolder, const std::string& extension);
 		~CWatchdog() = default;
 
-		inline const TAssetType&	AssetType() const { return mAssetType; }
+		inline TAssetType					AssetType() const { return mAssetType; }
 
 		void											Update();
 
-		inline const TFileSet&		AllFiles() const { return mFiles; }
+		inline const TFileSet&		Files() const { return mFiles; }
 		inline const TFileSet&		ToDelete() const { return mToDelete; };
 		inline const TFileSet&		ToCreate() const { return mToCreate; };
 

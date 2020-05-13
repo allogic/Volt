@@ -1,5 +1,4 @@
 #pragma once
 
-#include <Glad/glad.h>
-
+#include <Core.h>
 #include <Module.h>

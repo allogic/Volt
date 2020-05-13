@@ -11,20 +11,25 @@ namespace Volt
 		using CreateModule = CModule* (*)();
 		using DestroyModule = void (*)(CModule*);
 
-		CModule(const char* id) {};
+		CModule() = default;
 		virtual ~CModule() = default;
 
-		virtual s32 OnUpdate() { return 0; };
-		virtual s32 OnRender() const { return 0; };
+		virtual s32												OnUpdate() { return 0; };
+		virtual s32												OnRender() const { return 0; };
+
+		inline virtual const std::string	Id() const = 0;
+
+	protected:
+		const std::string mId;
 	};
 }
 
 extern "C"
 {
 	VOLT_API Volt::CModule* CreateModule();
-	VOLT_API Volt::CModule* DestroyModule();
+	VOLT_API void						DestroyModule(Volt::CModule* ptr);
 }
 
-#define MAKE_MODULE(TYPE, ID)																			\
-Volt::CModule*	CreateModule() { return new TYPE(ID); }						\
+#define MAKE_MODULE(TYPE)																					\
+Volt::CModule*	CreateModule() { return new TYPE(); }							\
 void						DestroyModule(Volt::CModule* ptr) { delete ptr; }

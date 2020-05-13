@@ -4,14 +4,10 @@
 #include <Instance.h>
 #include <Watchdog.h>
 #include <ModuleLoader.h>
+#include <AssetType.h>
 
 namespace Volt
 {
-	enum TAssetType : u32
-	{
-		Module = 0,
-	};
-
 	class CAssetDatabase
 		: public CInstance<CAssetDatabase>
 	{
@@ -19,18 +15,23 @@ namespace Volt
 		CAssetDatabase();
 		virtual ~CAssetDatabase();
 
-		void										Update();
+		void															Update();
+
+		std::set<CModule*>								Modules() const;
+		CModule*													ModuleById(const std::string& id) const;
 
 	private:
-		void										CreateFolderIfNotExists(const std::filesystem::path& folder) const;
+		std::filesystem::path							AssetPathFromAssetType(TAssetType type);
+		std::filesystem::path							ObservedPathFromAssetType(TAssetType type);
 
-		void										UnloadModule(const CWatchdog::TFileSet& fileSet);
-		void										LoadModule(const CWatchdog::TFileSet& fileSet);
+		void															UnloadModule(const CWatchdog::TFileSet& fileSet);
+		void															LoadModule(const CWatchdog::TFileSet& fileSet);
 
-		std::vector<CWatchdog>	mWatchdogs;
+		std::vector<CWatchdog>						mWatchdogs;
 
-		std::filesystem::path		mModuleFolder;
+		std::filesystem::path							mObservedFolder;
+		std::filesystem::path							mAssetFolder;
 
-		CModuleLoader						mModuleLoader;
+		CModuleLoader											mModuleLoader;
 	};
 }

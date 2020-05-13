@@ -1,25 +1,21 @@
-#include <Windows.h>
-
 #include <ModuleLoader.h>
 
 s32 Volt::CModuleLoader::Unload(const std::filesystem::path& file)
 {
-	const auto it = mInstances.find(file);
+	const auto it = mModules.find(file.string());
 
-	if (it == mInstances.cend()) return 0;
+	if (it == mModules.cend()) return 0;
 
-	const auto hInstance = std::get<0>(it->second);
+	const auto hInstance = it->second.hInstance;
 
-	mInstances.erase(file);
+	mModules.erase(it);
 
-	const auto status = FreeLibrary(hInstance);
-
-	return static_cast<s32>(status);
+	return static_cast<s32>(FreeLibrary(hInstance));
 }
 
 s32 Volt::CModuleLoader::Load(const std::filesystem::path& file)
 {
-	if (mInstances.find(file) != mInstances.cend()) return 0;
+	if (mModules.find(file.string()) != mModules.cend()) return 0;
 
 	HINSTANCE hInstance = LoadLibraryA(file.string().c_str());
 
@@ -34,10 +30,13 @@ s32 Volt::CModuleLoader::Load(const std::filesystem::path& file)
 
 	if (!CreateModule || !DestroyModule) return 0;
 
-	mInstances.emplace(
-		file,
-		TModuleInstance{ hInstance, TModulePtr{CreateModule(), DestroyModule} }
-	);
+	auto pModule = TModulePtr{ CreateModule(), DestroyModule };
+
+	if (!pModule.get()) return 0;
+
+	auto moduleInfo = TModuleInfo{ hInstance, file, std::move(pModule) };
+
+	mModules.emplace(file.string(), std::move(moduleInfo));
 
 	return 1;
 }

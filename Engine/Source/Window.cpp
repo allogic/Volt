@@ -1,6 +1,3 @@
-#include <Glad/glad.h>
-#include <Glfw/glfw3.h>
-
 #include <Window.h>
 
 Volt::CWindow::CWindow(const s32 width, const s32 height, const s32 antialiasing, const s32 vsync)

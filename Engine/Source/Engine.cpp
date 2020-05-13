@@ -1,4 +1,5 @@
-#include <Engine.h>
+#define VOLT_ENGINE_WINDOWS_ENTRY
+
 #include <Core.h>
 #include <AssetDatabase.h>
 #include <Window.h>
@@ -19,15 +20,24 @@ int main()
 	const f32 watchRate = 1.f / 1.f;
 	f32 prevWatchTime = 0.f;
 
-	while (true)
+	s32 status = 0;
+
+	while (!status)
 	{
 		glfwPollEvents();
 
 		time = static_cast<f32>(glfwGetTime());
 		deltaTime = time - prevTime;
 
+		for (Volt::CModule* pModule : assetDb.Modules())
+			status = pModule->OnUpdate();
+
+
 		if ((time - prevRenderTime) >= renderRate)
 		{
+			for (Volt::CModule* pModule : assetDb.Modules())
+				status = pModule->OnRender();
+
 			glfwSwapBuffers(window.GlfwWindowPtr());
 
 			prevRenderTime = time;
