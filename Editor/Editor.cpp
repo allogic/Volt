@@ -1,4 +1,6 @@
-#include <Volt.h>
+#include <Types.h>
+#include <Core.h>
+#include <Module.h>
 
 #include <iostream>
 
@@ -6,30 +8,15 @@ class CEditor
 	: public Volt::CModule
 {
 public:
-	CEditor()
-	{
-		mpWindow = new Volt::CWindow(1280, 720, 0, 0);
-		std::cout << "Created engine window ptr: " << mpWindow << std::endl;
-	};
-	virtual ~CEditor()
-	{
-		delete mpWindow;
-		std::cout << "Destroyed engine window ptr: " << mpWindow << std::endl;
-	};
+	CEditor() { std::cout << WindowTitle() << " created" << std::endl; };
+	virtual ~CEditor() { std::cout << WindowTitle() << " destroyed" << std::endl; };
 
-	inline const std::string Id() const { return "Editor"; };
+	inline const char*	WindowTitle() const override { return "Editor"; };
+	inline const s32		WindowWidth() const override { return 1280; };
+	inline const s32		WindowHeight() const override { return 720; };
 
-	s32 OnUpdate() override
-	{
-		return 0;
-	}
-
-	s32 OnRender() const override
-	{
-		return 0;
-	}
-
-	Volt::CWindow* mpWindow;
+	inline s32					OnUpdate() override {	return 0;	}
+	inline s32					OnRender() const override	{	return 0;	}
 };
 
 MAKE_MODULE(CEditor);

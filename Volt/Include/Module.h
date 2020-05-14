@@ -1,7 +1,7 @@
 #pragma once
 
-#include <Types.h>
 #include <Core.h>
+#include <Types.h>
 
 namespace Volt
 {
@@ -17,10 +17,9 @@ namespace Volt
 		virtual s32												OnUpdate() { return 0; };
 		virtual s32												OnRender() const { return 0; };
 
-		inline virtual const std::string	Id() const = 0;
-
-	protected:
-		const std::string mId;
+		inline virtual const char*				WindowTitle() const = 0;
+		inline virtual const s32					WindowWidth() const = 0;
+		inline virtual const s32					WindowHeight() const = 0;
 	};
 }
 

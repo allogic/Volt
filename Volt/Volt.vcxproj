@@ -20,7 +20,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
-    <ProjectGuid>{72FBDD5E-EDBB-4328-A878-6399C99F9C38}</ProjectGuid>
+    <ProjectGuid>{081F81ED-BE12-4A00-A02F-CA3B5286CE9B}</ProjectGuid>
     <RootNamespace>Volt</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
@@ -142,12 +142,11 @@
   <ItemGroup>
     <ClInclude Include="Include\Core.h" />
     <ClInclude Include="Include\Module.h" />
+    <ClInclude Include="Include\ModuleInfo.h" />
     <ClInclude Include="Include\Types.h" />
-    <ClInclude Include="Include\Volt.h" />
-    <ClInclude Include="Include\Window.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\Window.cpp" />
+    <ClCompile Include="Source\Volt.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

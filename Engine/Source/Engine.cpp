@@ -5,23 +5,17 @@
 
 int main()
 {
-	glfwSetErrorCallback([](s32 error, const char* msg) {
-		VOLT_TRACE(msg);
-		});
+	glfwSetErrorCallback([](s32 error, const char* msg) {	VOLT_TRACE(msg); });
 
-	if (!glfwInit()) // remove glad.c
+	if (!glfwInit())
 	{
 		VOLT_TRACE("Failed initializing glfw");
 		VOLT_EXIT;
 	}
 
-	if (!gladLoadGL())
-	{
-		VOLT_TRACE("Failed loading gl");
-		VOLT_EXIT;
-	}
-
 	auto& assetDb = Volt::CAssetDatabase::Instance();
+
+	assetDb.Update();
 
 	f32 time = 0.f;
 	f32 prevTime = 0.f;
@@ -37,13 +31,31 @@ int main()
 
 	while (!status)
 	{
-		glfwPollEvents();
-
 		time = static_cast<f32>(glfwGetTime());
 		deltaTime = time - prevTime;
 
-		for (Volt::CModule* pModule : assetDb.Modules())
-			status = pModule->OnUpdate();
+		for (auto& module : assetDb.Modules())
+		{
+			glfwMakeContextCurrent(module.pWindow);
+			glfwSwapInterval(0);
+
+			//static s32 glLoaded = 0; // check if only once gladLoadGL()
+			//
+			//if (!glLoaded)
+			//{
+			//	glLoaded = 1;
+			//
+			//	if (!gladLoadGL())
+			//	{
+			//		VOLT_TRACE("Failed loading gl");
+			//		VOLT_EXIT;
+			//	}
+			//}
+
+			status = module.pModule->OnUpdate();
+
+
+		}
 
 		if ((time - prevRenderTime) >= renderRate)
 		{
@@ -61,6 +73,8 @@ int main()
 
 			prevWatchTime = time;
 		}
+
+		glfwPollEvents();
 
 		prevTime = time;
 	}

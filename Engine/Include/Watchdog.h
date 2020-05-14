@@ -1,15 +1,13 @@
 #pragma once
 
 #include <Core.h>
-#include <AssetType.h>
+#include <Types.h>
 
 namespace Volt
 {
 	class CWatchdog
 	{
 	public:
-		using TFileSet = std::set<std::filesystem::path>;
-
 		CWatchdog(TAssetType assetType, const std::filesystem::path& cwFolder, const std::string& extension);
 		~CWatchdog() = default;
 
@@ -17,9 +15,9 @@ namespace Volt
 
 		void											Update();
 
-		inline const TFileSet&		Files() const { return mFiles; }
-		inline const TFileSet&		ToDelete() const { return mToDelete; };
-		inline const TFileSet&		ToCreate() const { return mToCreate; };
+		inline const TPathSet&		Files() const { return mFiles; }
+		inline const TPathSet&		ToDelete() const { return mToDelete; };
+		inline const TPathSet&		ToCreate() const { return mToCreate; };
 
 	private:
 		void											CheckDeletedFiles();
@@ -29,9 +27,9 @@ namespace Volt
 		std::filesystem::path			mCwFolder;
 		std::string								mExtension;
 
-		TFileSet									mFiles;
+		TPathSet									mFiles;
 
-		TFileSet									mToCreate;
-		TFileSet									mToDelete;
+		TPathSet									mToCreate;
+		TPathSet									mToDelete;
 	};
 }

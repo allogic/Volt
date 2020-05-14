@@ -1,4 +1,6 @@
-#include <Volt.h>
+#include <Types.h>
+#include <Core.h>
+#include <Module.h>
 
 #include <iostream>
 
@@ -6,29 +8,15 @@ class CGame
 	: public Volt::CModule
 {
 public:
-	CGame()
-	{
-		//mpWindow = new Volt::CWindow(1280, 720, 0, 0);
-		std::cout << "Game window ptr: " << mpWindow << std::endl;
-	};
-	virtual ~CGame()
-	{
-		//delete mpWindow;
-	};
+	CGame() { std::cout << WindowTitle() << " created" << std::endl; };
+	virtual ~CGame() { std::cout << WindowTitle() << " destroyed" << std::endl; };
 
-	inline const std::string Id() const { return "Game"; };
+	inline const char*	WindowTitle() const override { return "Editor"; };
+	inline const s32		WindowWidth() const override { return 1280; };
+	inline const s32		WindowHeight() const override { return 720; };
 
-	s32 OnUpdate() override
-	{
-		return 0;
-	}
-
-	s32 OnRender() const override
-	{
-		return 0;
-	}
-
-	Volt::CWindow* mpWindow;
+	inline s32					OnUpdate() override { return 0; }
+	inline s32					OnRender() const override { return 0; }
 };
 
 MAKE_MODULE(CGame);

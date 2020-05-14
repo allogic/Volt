@@ -1,7 +1,7 @@
 #pragma once
 
-#define VOLT_OBSERVED_PATH "C:\\Users\\burmi\\Downloads\\Volt\\x64\\Debug"
-#define VOLT_ASSET_PATH "C:\\Users\\burmi\\Downloads\\Volt\\x64\\Debug\\Assets"
+#define VOLT_OBSERVED_PATH "C:\\Users\\Michael\\Downloads\\Volt\\x64\\Debug"
+#define VOLT_ASSET_PATH "C:\\Users\\Michael\\Downloads\\Volt\\x64\\Debug\\Assets"
 
 #define _AMD64_
 
@@ -30,7 +30,6 @@
 #include <vector>
 #include <tuple>
 #include <thread>
-#include <memory>
 #include <utility>
 #include <algorithm>
 #include <type_traits>

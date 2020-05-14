@@ -74,21 +74,14 @@ void Volt::CAssetDatabase::Update()
 	}
 }
 
-std::set<Volt::CModule*> Volt::CAssetDatabase::Modules() const
+std::vector<Volt::TModuleInfo> Volt::CAssetDatabase::Modules()
 {
-	std::set<CModule*> modules;
-
-	for (const auto& [id, module] : mModuleLoader.mModules)
-		modules.emplace(module.pModule.get());
-
-	return modules;
+	return mModuleLoader.Modules();
 }
 
-Volt::CModule* Volt::CAssetDatabase::ModuleById(const std::string& id) const
+Volt::TModuleInfo* Volt::CAssetDatabase::ModuleByName(const std::string& id)
 {
-	const auto it = mModuleLoader.mModules.find(id);
-
-	return it == mModuleLoader.mModules.cend() ? nullptr : it->second.pModule.get();
+	return mModuleLoader.ModuleByName(id);
 }
 
 std::filesystem::path Volt::CAssetDatabase::AssetPathFromAssetType(TAssetType type)
@@ -109,7 +102,7 @@ std::filesystem::path Volt::CAssetDatabase::ObservedPathFromAssetType(TAssetType
 	}
 }
 
-void Volt::CAssetDatabase::UnloadModule(const CWatchdog::TFileSet& fileSet)
+void Volt::CAssetDatabase::UnloadModule(const TPathSet& fileSet)
 {
 	for (const auto& srcFile : fileSet)
 	{
@@ -124,7 +117,7 @@ void Volt::CAssetDatabase::UnloadModule(const CWatchdog::TFileSet& fileSet)
 	}
 }
 
-void Volt::CAssetDatabase::LoadModule(const CWatchdog::TFileSet& fileSet)
+void Volt::CAssetDatabase::LoadModule(const TPathSet& fileSet)
 {
 	for (const auto& srcFile : fileSet)
 	{

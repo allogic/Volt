@@ -4,7 +4,7 @@
 #include <Instance.h>
 #include <Watchdog.h>
 #include <ModuleLoader.h>
-#include <AssetType.h>
+#include <ModuleInfo.h>
 
 namespace Volt
 {
@@ -15,23 +15,23 @@ namespace Volt
 		CAssetDatabase();
 		virtual ~CAssetDatabase();
 
-		void															Update();
+		void																	Update();
 
-		std::set<CModule*>								Modules() const;
-		CModule*													ModuleById(const std::string& id) const;
+		std::vector<TModuleInfo>							Modules();
+		TModuleInfo*													ModuleByName(const std::string& id);
 
 	private:
-		std::filesystem::path							AssetPathFromAssetType(TAssetType type);
-		std::filesystem::path							ObservedPathFromAssetType(TAssetType type);
+		std::filesystem::path									AssetPathFromAssetType(TAssetType type);
+		std::filesystem::path									ObservedPathFromAssetType(TAssetType type);
 
-		void															UnloadModule(const CWatchdog::TFileSet& fileSet);
-		void															LoadModule(const CWatchdog::TFileSet& fileSet);
+		void																	UnloadModule(const TPathSet& fileSet);
+		void																	LoadModule(const TPathSet& fileSet);
 
-		std::vector<CWatchdog>						mWatchdogs;
+		std::vector<CWatchdog>								mWatchdogs;
 
-		std::filesystem::path							mObservedFolder;
-		std::filesystem::path							mAssetFolder;
+		std::filesystem::path									mObservedFolder;
+		std::filesystem::path									mAssetFolder;
 
-		CModuleLoader											mModuleLoader;
+		CModuleLoader													mModuleLoader;
 	};
 }
