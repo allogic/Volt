@@ -8,8 +8,8 @@ class CGame
   : public Volt::CModule
 {
 public:
-  CGame() { std::cout << WindowTitle() << " created" << std::endl; };
-  virtual ~CGame() { std::cout << WindowTitle() << " destroyed" << std::endl; };
+  CGame() = default;
+  virtual ~CGame() = default;
 
   inline const char*  WindowTitle() const override { return "Game"; };
   inline const s32    WindowWidth() const override { return 1280; };

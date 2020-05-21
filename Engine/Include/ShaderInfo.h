@@ -7,10 +7,13 @@ namespace Volt
   struct TShaderInfo
   {
     TShaderInfo(
+      GLuint program,
       std::filesystem::path file
     )
-      : file(file) {}
+      : program(program)
+      , file(file) {}
 
+    GLuint                   program;
     std::filesystem::path    file;
   };
 }

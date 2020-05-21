@@ -8,8 +8,8 @@ class CEditor
   : public Volt::CModule
 {
 public:
-  CEditor() { std::cout << WindowTitle() << " created" << std::endl; };
-  virtual ~CEditor() { std::cout << WindowTitle() << " destroyed" << std::endl; };
+  CEditor() = default;
+  virtual ~CEditor() = default;
 
   inline const char*  WindowTitle() const override { return "Editor"; };
   inline const s32    WindowWidth() const override { return 1280; };

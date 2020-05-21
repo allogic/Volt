@@ -15,7 +15,7 @@ int main()
 
   auto& assetDb = Volt::CAssetDatabase::Instance();
 
-  assetDb.Update();
+  assetDb.UpdateModules();
 
   f32 time = 0.f;
   f32 prevTime = 0.f;
@@ -28,6 +28,7 @@ int main()
   f32 prevWatchTime = 0.f;
 
   s32 status = 0;
+  s32 glLoaded = 0;
 
   while (!status)
   {
@@ -38,8 +39,6 @@ int main()
     {
       glfwMakeContextCurrent(moduleInfo.pWindow);
       glfwSwapInterval(0);
-
-      static s32 glLoaded = 0; // check if only once gladLoadGL()
       
       if (!glLoaded)
       {
@@ -69,7 +68,12 @@ int main()
 
     if ((time - prevWatchTime) >= watchRate)
     {
-      assetDb.Update();
+      assetDb.UpdateModules();
+
+      if (glLoaded)
+      {
+        assetDb.UpdateShaders();
+      }
 
       prevWatchTime = time;
     }

@@ -18,6 +18,11 @@ namespace Volt
     s32                            Load(const std::filesystem::path& file);
 
   private:
+    s32                            CompileShader(GLuint shader, const std::string& source);
+    s32                            LinkShaders(GLuint program, GLuint vertexShader, GLuint fragmentShader);
+
+    s32                            CheckStatus(GLuint shader, GLenum type, std::string& log);
+
     std::vector<TShaderInfo>       mShaders;
   };
 }

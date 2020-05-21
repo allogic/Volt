@@ -18,7 +18,8 @@ namespace Volt
     CAssetDatabase();
     virtual ~CAssetDatabase();
 
-    void                       Update();
+    void                       UpdateModules();
+    void                       UpdateShaders();
 
     inline CModuleLoader&      Modules() { return mModuleLoader; }
     inline CShaderLoader&      Shaders() { return mShaderLoader; }
@@ -27,10 +28,16 @@ namespace Volt
     std::filesystem::path      AssetPathFromAssetType(TAssetType type);
     std::filesystem::path      ObservedPathFromAssetType(TAssetType type);
 
-    void                       UnloadModule(const std::set<std::filesystem::path>& fileSet);
-    void                       LoadModule(const std::set<std::filesystem::path>& fileSet);
+    void                       UnloadModule(const CWatchdog::TFileSet& fileSet);
+    void                       UpdateModule(const CWatchdog::TFileSet& fileSet);
+    void                       LoadModule(const CWatchdog::TFileSet& fileSet);
 
-    std::vector<CWatchdog>     mWatchdogs;
+    void                       UnloadShader(const CWatchdog::TFileSet& fileSet);
+    void                       UpdateShader(const CWatchdog::TFileSet& fileSet);
+    void                       LoadShader(const CWatchdog::TFileSet& fileSet);
+
+    std::unique_ptr<CWatchdog> mModuleWatchdog;
+    std::unique_ptr<CWatchdog> mShaderWatchdog;
 
     std::filesystem::path      mObservedFolder;
     std::filesystem::path      mAssetFolder;

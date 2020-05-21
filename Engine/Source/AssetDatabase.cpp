@@ -50,48 +50,32 @@ Volt::CAssetDatabase::CAssetDatabase()
     VOLT_EXIT;
   }
 
-  mWatchdogs.emplace_back(
-    Volt::TAssetType::Module,
-    ObservedPathFromAssetType(Volt::TAssetType::Module),
-    ".dll"
-  );
-
-  mWatchdogs.emplace_back(
-    Volt::TAssetType::Shader,
-    ObservedPathFromAssetType(Volt::TAssetType::Shader),
-    ".glsl"
-  );
+  mModuleWatchdog = std::make_unique<CWatchdog>(ObservedPathFromAssetType(TAssetType::Module), ".dll");
+  mShaderWatchdog = std::make_unique<CWatchdog>(ObservedPathFromAssetType(TAssetType::Shader), ".glsl");
 }
 
 Volt::CAssetDatabase::~CAssetDatabase()
 {
-  for (const auto& watchdog : mWatchdogs)
-  {
-    switch (watchdog.AssetType())
-    {
-    case Volt::TAssetType::Module:
-      UnloadModule(watchdog.Files());
-      break;
-    }
-  }
+  UnloadModule(mModuleWatchdog->AllFiles());
+  UnloadShader(mShaderWatchdog->AllFiles());
 }
 
-void Volt::CAssetDatabase::Update()
+void Volt::CAssetDatabase::UpdateModules()
 {
-  for (auto& watchdog : mWatchdogs)
-  {
-    watchdog.Update();
+  mModuleWatchdog->Update();
 
-    switch (watchdog.AssetType())
-    {
-    case Volt::TAssetType::Module:
-      UnloadModule(watchdog.ToDelete());
-      LoadModule(watchdog.ToCreate());
-      break;
-    default:
-      break;
-    }
-  }
+  UnloadModule(mModuleWatchdog->ToDelete());
+  UpdateModule(mModuleWatchdog->ToChange());
+  LoadModule(mModuleWatchdog->ToCreate());
+}
+
+void Volt::CAssetDatabase::UpdateShaders()
+{
+  mShaderWatchdog->Update();
+
+  UnloadShader(mShaderWatchdog->ToDelete());
+  UpdateShader(mShaderWatchdog->ToChange());
+  LoadShader(mShaderWatchdog->ToCreate());
 }
 
 std::filesystem::path Volt::CAssetDatabase::AssetPathFromAssetType(TAssetType type)
@@ -114,13 +98,17 @@ std::filesystem::path Volt::CAssetDatabase::ObservedPathFromAssetType(TAssetType
   }
 }
 
-void Volt::CAssetDatabase::UnloadModule(const std::set<std::filesystem::path>& fileSet)
+void Volt::CAssetDatabase::UnloadModule(const CWatchdog::TFileSet& fileSet)
 {
   for (const auto& srcFile : fileSet)
   {
     const auto destFile = AssetPathFromAssetType(TAssetType::Module) / srcFile.filename();
 
-    if (!mModuleLoader.Unload(destFile))
+    if (mModuleLoader.Unload(destFile))
+    {
+      VOLT_TRACE("Unloading module " << destFile);
+    }
+    else
     {
       VOLT_TRACE("Failed unloading module " << destFile);
 
@@ -129,7 +117,13 @@ void Volt::CAssetDatabase::UnloadModule(const std::set<std::filesystem::path>& f
   }
 }
 
-void Volt::CAssetDatabase::LoadModule(const std::set<std::filesystem::path>& fileSet)
+void Volt::CAssetDatabase::UpdateModule(const CWatchdog::TFileSet& fileSet)
+{
+  UnloadModule(fileSet);
+  LoadModule(fileSet);
+}
+
+void Volt::CAssetDatabase::LoadModule(const CWatchdog::TFileSet& fileSet)
 {
   for (const auto& srcFile : fileSet)
   {
@@ -137,9 +131,60 @@ void Volt::CAssetDatabase::LoadModule(const std::set<std::filesystem::path>& fil
 
     std::filesystem::copy_file(srcFile, destFile, std::filesystem::copy_options::overwrite_existing);
 
-    if (!mModuleLoader.Load(destFile))
+    if (mModuleLoader.Load(destFile))
+    {
+      VOLT_TRACE("Loading module " << destFile);
+    }
+    else
     {
       VOLT_TRACE("Failed loading module " << destFile);
+
+      if (std::filesystem::exists(destFile))
+        std::filesystem::remove(destFile);
+    }
+  }
+}
+
+void Volt::CAssetDatabase::UnloadShader(const CWatchdog::TFileSet& fileSet)
+{
+  for (const auto& srcFile : fileSet)
+  {
+    const auto destFile = AssetPathFromAssetType(TAssetType::Shader) / srcFile.filename();
+
+    if (mShaderLoader.Unload(destFile))
+    {
+      VOLT_TRACE("Unloading shader " << destFile);
+    }
+    else
+    {
+      VOLT_TRACE("Failed unloading shader " << destFile);
+
+      std::filesystem::remove(destFile);
+    }
+  }
+}
+
+void Volt::CAssetDatabase::UpdateShader(const CWatchdog::TFileSet& fileSet)
+{
+  UnloadShader(fileSet);
+  LoadShader(fileSet);
+}
+
+void Volt::CAssetDatabase::LoadShader(const CWatchdog::TFileSet& fileSet)
+{
+  for (const auto& srcFile : fileSet)
+  {
+    const auto destFile = AssetPathFromAssetType(TAssetType::Shader) / srcFile.filename();
+
+    std::filesystem::copy_file(srcFile, destFile, std::filesystem::copy_options::overwrite_existing);
+
+    if (mShaderLoader.Load(destFile))
+    {
+      VOLT_TRACE("Loading shader " << destFile);
+    }
+    else
+    {
+      VOLT_TRACE("Failed loading shader " << destFile);
 
       if (std::filesystem::exists(destFile))
         std::filesystem::remove(destFile);

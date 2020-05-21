@@ -25,15 +25,19 @@
 #include <iostream>
 #include <string>
 #include <cstring>
+#include <fstream>
+#include <sstream>
 #include <filesystem>
 #include <map>
 #include <set>
 #include <vector>
 #include <tuple>
+#include <memory>
 #include <thread>
 #include <utility>
 #include <algorithm>
 #include <type_traits>
+#include <chrono>
 
 #define VOLT_API __declspec(dllexport)
 
@@ -45,7 +49,7 @@
   #define VOLT_GL_MINOR 6
 #endif
 
-#define VOLT_TRACE(MSG) std::cout << __FILE__ << ':' << __LINE__ << ' ' << MSG << std::endl;
+#define VOLT_TRACE(MSG) { std::cout << __FILE__ << ':' << __LINE__ << ' ' << MSG << std::endl; }
 #define VOLT_EXIT { std::exit(EXIT_FAILURE); }
 #define VOLT_ASSERT(EXPR, MSG) { if (!(EXPR)) { VOLT_TRACE(MSG); VOLT_EXIT; } }
 
@@ -57,5 +61,5 @@ inline auto begin() const { return std::begin(VALUE); }  \
 inline auto end() const { return std::end(VALUE); }
 
 #define VOLT_MAKE_MODULE(TYPE)                                     \
-Volt::CModule*  CreateModule() { return new TYPE(); }              \
+Volt::CModule*  CreateModule() { return new TYPE; }                \
 void            DestroyModule(Volt::CModule* ptr) { delete ptr; }

@@ -2,35 +2,38 @@
 
 #include <Core.h>
 #include <Types.h>
-#include <AssetType.h>
 
 namespace Volt
 {
   class CWatchdog
   {
   public:
-    CWatchdog(TAssetType assetType, const std::filesystem::path& cwFolder, const std::string& extension);
+    using TFileInfoMap = std::map<std::filesystem::path, std::filesystem::file_time_type>;
+    using TFileSet     = std::set<std::filesystem::path>;
+
+    CWatchdog(const std::filesystem::path& folder, const std::string& extension);
     ~CWatchdog() = default;
 
-    inline TAssetType                             AssetType() const { return mAssetType; }
+    void                      Update();
 
-    void                                          Update();
-
-    inline const std::set<std::filesystem::path>& Files() const { return mFiles; }
-    inline const std::set<std::filesystem::path>& ToDelete() const { return mToDelete; };
-    inline const std::set<std::filesystem::path>& ToCreate() const { return mToCreate; };
+    const TFileSet&           AllFiles();
+    inline const TFileSet&    ToDelete() const { return mToDelete; };
+    inline const TFileSet&    ToCreate() const { return mToCreate; };
+    inline const TFileSet&    ToChange() const { return mToChange; };
 
   private:
-    void                                          CheckDeletedFiles();
-    void                                          CheckInsertedFiles();
+    void                      CheckDeletedFiles();
+    void                      CheckInsertedFiles();
+    void                      CheckChangedFiles();
 
-    TAssetType                                    mAssetType;
-    std::filesystem::path                         mCwFolder;
-    std::string                                   mExtension;
+    std::filesystem::path     mFolder;
+    std::string               mExtension;
 
-    std::set<std::filesystem::path>               mFiles;
+    TFileInfoMap              mFileInfos;
 
-    std::set<std::filesystem::path>               mToCreate;
-    std::set<std::filesystem::path>               mToDelete;
+    TFileSet                  mAllFiles;
+    TFileSet                  mToCreate;
+    TFileSet                  mToDelete;
+    TFileSet                  mToChange;
   };
 }
