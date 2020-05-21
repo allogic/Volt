@@ -4,12 +4,23 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.29926.136
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Engine", "Engine\Engine.vcxproj", "{E207C802-7F6C-4B5B-A24C-0971567D3EEE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{081F81ED-BE12-4A00-A02F-CA3B5286CE9B} = {081F81ED-BE12-4A00-A02F-CA3B5286CE9B}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Game", "Game\Game.vcxproj", "{A1FCBAFB-1684-4817-900C-896E37C407E6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{081F81ED-BE12-4A00-A02F-CA3B5286CE9B} = {081F81ED-BE12-4A00-A02F-CA3B5286CE9B}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Editor", "Editor\Editor.vcxproj", "{3C24BF7C-AA5E-4217-B973-73083824AE67}"
+	ProjectSection(ProjectDependencies) = postProject
+		{081F81ED-BE12-4A00-A02F-CA3B5286CE9B} = {081F81ED-BE12-4A00-A02F-CA3B5286CE9B}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Volt", "Volt\Volt.vcxproj", "{081F81ED-BE12-4A00-A02F-CA3B5286CE9B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{D1C87E52-F6E4-4227-ADB5-F7B3B9F55432}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -54,6 +65,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A1FCBAFB-1684-4817-900C-896E37C407E6} = {D1C87E52-F6E4-4227-ADB5-F7B3B9F55432}
+		{3C24BF7C-AA5E-4217-B973-73083824AE67} = {D1C87E52-F6E4-4227-ADB5-F7B3B9F55432}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {35E9CD3B-85FF-41CC-B811-43F1C263034C}

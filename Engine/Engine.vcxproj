@@ -146,12 +146,17 @@
     <ClCompile Include="Source\AssetDatabase.cpp" />
     <ClCompile Include="Source\ModuleLoader.cpp" />
     <ClCompile Include="Source\Engine.cpp" />
+    <ClCompile Include="Source\ShaderLoader.cpp" />
     <ClCompile Include="Source\Watchdog.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\AssetDatabase.h" />
+    <ClInclude Include="Include\AssetType.h" />
+    <ClInclude Include="Include\ModuleInfo.h" />
     <ClInclude Include="Include\ModuleLoader.h" />
     <ClInclude Include="Include\Instance.h" />
+    <ClInclude Include="Include\ShaderInfo.h" />
+    <ClInclude Include="Include\ShaderLoader.h" />
     <ClInclude Include="Include\Watchdog.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

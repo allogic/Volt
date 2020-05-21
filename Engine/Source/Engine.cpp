@@ -5,83 +5,83 @@
 
 int main()
 {
-	glfwSetErrorCallback([](s32 error, const char* msg) {	VOLT_TRACE(msg); });
+  glfwSetErrorCallback([](s32 error, const char* msg) { VOLT_TRACE(msg); });
 
-	if (!glfwInit())
-	{
-		VOLT_TRACE("Failed initializing glfw");
-		VOLT_EXIT;
-	}
+  if (!glfwInit())
+  {
+    VOLT_TRACE("Failed initializing glfw");
+    VOLT_EXIT;
+  }
 
-	auto& assetDb = Volt::CAssetDatabase::Instance();
+  auto& assetDb = Volt::CAssetDatabase::Instance();
 
-	assetDb.Update();
+  assetDb.Update();
 
-	f32 time = 0.f;
-	f32 prevTime = 0.f;
-	f32 deltaTime = 0.f;
+  f32 time = 0.f;
+  f32 prevTime = 0.f;
+  f32 deltaTime = 0.f;
 
-	const f32 renderRate = 1.f / 60.f;
-	f32 prevRenderTime = 0.f;
+  const f32 renderRate = 1.f / 60.f;
+  f32 prevRenderTime = 0.f;
 
-	const f32 watchRate = 1.f / 1.f;
-	f32 prevWatchTime = 0.f;
+  const f32 watchRate = 1.f / 1.f;
+  f32 prevWatchTime = 0.f;
 
-	s32 status = 0;
+  s32 status = 0;
 
-	while (!status)
-	{
-		time = static_cast<f32>(glfwGetTime());
-		deltaTime = time - prevTime;
+  while (!status)
+  {
+    time = static_cast<f32>(glfwGetTime());
+    deltaTime = time - prevTime;
 
-		for (auto& module : assetDb.Modules())
-		{
-			glfwMakeContextCurrent(module.pWindow);
-			glfwSwapInterval(0);
+    for (const auto& moduleInfo : assetDb.Modules())
+    {
+      glfwMakeContextCurrent(moduleInfo.pWindow);
+      glfwSwapInterval(0);
 
-			//static s32 glLoaded = 0; // check if only once gladLoadGL()
-			//
-			//if (!glLoaded)
-			//{
-			//	glLoaded = 1;
-			//
-			//	if (!gladLoadGL())
-			//	{
-			//		VOLT_TRACE("Failed loading gl");
-			//		VOLT_EXIT;
-			//	}
-			//}
+      static s32 glLoaded = 0; // check if only once gladLoadGL()
+      
+      if (!glLoaded)
+      {
+        glLoaded = 1;
+      
+        if (!gladLoadGL())
+        {
+          VOLT_TRACE("Failed loading gl");
+          VOLT_EXIT;
+        }
+      }
+    
+      status = moduleInfo.pModule->OnUpdate();
+    }
 
-			status = module.pModule->OnUpdate();
+    if ((time - prevRenderTime) >= renderRate)
+    {
+      for (const auto& moduleInfo : assetDb.Modules())
+      {
+        status = moduleInfo.pModule->OnRender();
 
+        glfwSwapBuffers(moduleInfo.pWindow);
+      }
 
-		}
+      prevRenderTime = time;
+    }
 
-		if ((time - prevRenderTime) >= renderRate)
-		{
-			for (Volt::CModule* pModule : assetDb.Modules())
-				status = pModule->OnRender();
+    if ((time - prevWatchTime) >= watchRate)
+    {
+      assetDb.Update();
 
-			//glfwSwapBuffers(window.GlfwWindowPtr());
+      prevWatchTime = time;
+    }
 
-			prevRenderTime = time;
-		}
+    glfwPollEvents();
 
-		if ((time - prevWatchTime) >= watchRate)
-		{
-			assetDb.Update();
+    prevTime = time;
+  }
 
-			prevWatchTime = time;
-		}
+  Volt::CAssetDatabase::Delete();
 
-		glfwPollEvents();
+  glfwTerminate();
 
-		prevTime = time;
-	}
-
-	Volt::CAssetDatabase::Delete();
-
-	glfwTerminate();
-
-	return 0;
+  return 0;
 }

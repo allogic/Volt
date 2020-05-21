@@ -2,23 +2,22 @@
 
 #include <Core.h>
 #include <Types.h>
-#include <Module.h>
-#include <ModuleInfo.h>
+#include <ShaderInfo.h>
 
 namespace Volt
 {
-  class CModuleLoader
+  class CShaderLoader
   {
   public:
-    VOLT_DECLARE_ITERABLE(mModules);
+    VOLT_DECLARE_ITERABLE(mShaders);
 
-    CModuleLoader() = default;
-    ~CModuleLoader() = default;
+    CShaderLoader() = default;
+    ~CShaderLoader() = default;
 
     s32                            Unload(const std::filesystem::path& file);
     s32                            Load(const std::filesystem::path& file);
 
   private:
-    std::vector<TModuleInfo>       mModules;
+    std::vector<TShaderInfo>       mShaders;
   };
 }

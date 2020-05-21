@@ -2,34 +2,35 @@
 
 #include <Core.h>
 #include <Types.h>
+#include <AssetType.h>
 
 namespace Volt
 {
-	class CWatchdog
-	{
-	public:
-		CWatchdog(TAssetType assetType, const std::filesystem::path& cwFolder, const std::string& extension);
-		~CWatchdog() = default;
+  class CWatchdog
+  {
+  public:
+    CWatchdog(TAssetType assetType, const std::filesystem::path& cwFolder, const std::string& extension);
+    ~CWatchdog() = default;
 
-		inline TAssetType					AssetType() const { return mAssetType; }
+    inline TAssetType                             AssetType() const { return mAssetType; }
 
-		void											Update();
+    void                                          Update();
 
-		inline const TPathSet&		Files() const { return mFiles; }
-		inline const TPathSet&		ToDelete() const { return mToDelete; };
-		inline const TPathSet&		ToCreate() const { return mToCreate; };
+    inline const std::set<std::filesystem::path>& Files() const { return mFiles; }
+    inline const std::set<std::filesystem::path>& ToDelete() const { return mToDelete; };
+    inline const std::set<std::filesystem::path>& ToCreate() const { return mToCreate; };
 
-	private:
-		void											CheckDeletedFiles();
-		void											CheckInsertedFiles();
+  private:
+    void                                          CheckDeletedFiles();
+    void                                          CheckInsertedFiles();
 
-		TAssetType								mAssetType;
-		std::filesystem::path			mCwFolder;
-		std::string								mExtension;
+    TAssetType                                    mAssetType;
+    std::filesystem::path                         mCwFolder;
+    std::string                                   mExtension;
 
-		TPathSet									mFiles;
+    std::set<std::filesystem::path>               mFiles;
 
-		TPathSet									mToCreate;
-		TPathSet									mToDelete;
-	};
+    std::set<std::filesystem::path>               mToCreate;
+    std::set<std::filesystem::path>               mToDelete;
+  };
 }

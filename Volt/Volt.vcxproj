@@ -142,7 +142,6 @@
   <ItemGroup>
     <ClInclude Include="Include\Core.h" />
     <ClInclude Include="Include\Module.h" />
-    <ClInclude Include="Include\ModuleInfo.h" />
     <ClInclude Include="Include\Types.h" />
   </ItemGroup>
   <ItemGroup>
