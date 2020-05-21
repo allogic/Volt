@@ -22,6 +22,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Volt", "Volt\Volt.vcxproj",
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{D1C87E52-F6E4-4227-ADB5-F7B3B9F55432}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Shaders", "Shaders\Shaders.vcxproj", "{0FC19760-7353-40E9-83C2-AF5DC4215BB5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -62,6 +64,14 @@ Global
 		{081F81ED-BE12-4A00-A02F-CA3B5286CE9B}.Release|x64.Build.0 = Release|x64
 		{081F81ED-BE12-4A00-A02F-CA3B5286CE9B}.Release|x86.ActiveCfg = Release|Win32
 		{081F81ED-BE12-4A00-A02F-CA3B5286CE9B}.Release|x86.Build.0 = Release|Win32
+		{0FC19760-7353-40E9-83C2-AF5DC4215BB5}.Debug|x64.ActiveCfg = Debug|x64
+		{0FC19760-7353-40E9-83C2-AF5DC4215BB5}.Debug|x64.Build.0 = Debug|x64
+		{0FC19760-7353-40E9-83C2-AF5DC4215BB5}.Debug|x86.ActiveCfg = Debug|Win32
+		{0FC19760-7353-40E9-83C2-AF5DC4215BB5}.Debug|x86.Build.0 = Debug|Win32
+		{0FC19760-7353-40E9-83C2-AF5DC4215BB5}.Release|x64.ActiveCfg = Release|x64
+		{0FC19760-7353-40E9-83C2-AF5DC4215BB5}.Release|x64.Build.0 = Release|x64
+		{0FC19760-7353-40E9-83C2-AF5DC4215BB5}.Release|x86.ActiveCfg = Release|Win32
+		{0FC19760-7353-40E9-83C2-AF5DC4215BB5}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -69,6 +79,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{A1FCBAFB-1684-4817-900C-896E37C407E6} = {D1C87E52-F6E4-4227-ADB5-F7B3B9F55432}
 		{3C24BF7C-AA5E-4217-B973-73083824AE67} = {D1C87E52-F6E4-4227-ADB5-F7B3B9F55432}
+		{0FC19760-7353-40E9-83C2-AF5DC4215BB5} = {D1C87E52-F6E4-4227-ADB5-F7B3B9F55432}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {35E9CD3B-85FF-41CC-B811-43F1C263034C}
